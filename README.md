@@ -1,5 +1,45 @@
+## BIS Standards Recommendation Engine
 
-## 📁 Repository Structure
+Accelerating MSE Compliance using AI (RAG System)
+
+## Overview
+
+The BIS Standards Recommendation Engine is an AI-powered system designed to help Micro and Small Enterprises (MSEs) quickly discover relevant standards published by the Bureau of Indian Standards.
+
+Instead of manually searching through lengthy documents, users can simply enter a product or material (e.g., cement, steel, AAC blocks), and the system will:
+
+* Retrieve relevant BIS standards
+* Rank them by relevance
+* Provide clear explanations
+* Problem Statement
+
+MSEs often struggle with:
+
+Complex BIS documentation
+Time-consuming manual search
+Lack of technical understanding
+Risk of non-compliance
+
+> This project automates the process using Retrieval-Augmented Generation (RAG).
+
+## Solution
+
+This system combines:
+
+Information Retrieval (TF-IDF) → Finds relevant standards
+AI/LLM (optional) → Generates explanations
+Flask Web App → User-friendly interface
+
+# Key Features
+
+✔ Fast keyword-based search (milliseconds)
+✔ No GPU or heavy ML required
+✔ Clean web UI for easy interaction
+✔ Explanation for each recommendation
+✔ Works offline (no API required)
+✔ Supports real BIS PDF ingestion
+
+##  Repository Structure
 
 ```
 bis-rag-engine/
@@ -21,45 +61,15 @@ bis-rag-engine/
 
 ---
 
-## 🧠 Chunking Strategy
+## How It Works
+Step 1: User Input
 
-`src/ingest.py` offers two strategies:
+User enters a query (e.g., cement)
 
-| Strategy | How | Best for |
-|---|---|---|
-| `by_standard` (default) | Splits on `IS XXXX` header regex | SP-21 (one section per standard) |
-| `sliding_window` | 512-token windows, 64-token overlap | Dense / unstructured PDFs |
-
-```bash
-# Standard-based (recommended for BIS SP-21)
-python src/ingest.py --pdf data/BIS_SP21.pdf --output data/chunks.json --strategy by_standard
-
-# Sliding window fallback
-python src/ingest.py --pdf data/BIS_SP21.pdf --output data/chunks.json --strategy sliding_window
-```
-
----
-
-## 📊 Evaluation Results (Public Test Set)
-
-| Metric | Target | Achieved |
-|---|---|---|
-| Hit Rate @3 | > 80% | **100%** |
-| MRR @5 | > 0.70 | **1.00** |
-| Avg Latency | < 5s | **< 2ms** |
-
----
-
-## 🌐 API Reference
-
-### `POST /api/recommend`
-```json
-{ "query": "53 grade OPC cement for high-rise construction", "top_k": 5 }
-```
-Response includes `data_source` field showing which KB was used.
-
-### `POST /api/reload`
-Re-loads knowledge base from `data/chunks.json` without restarting the server.
-
-### `GET /api/health`
-Returns server status and active `data_source`.
+Step 2: Retrieval
+TF-IDF algorithm finds matching standards
+Keyword boost improves accuracy
+Step 3: Ranking
+Top 3–5 relevant standards are selected
+Step 4: Explanation
+AI or rule-based logic explains why each standard applies.
