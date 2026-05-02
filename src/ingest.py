@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-"""
-src/ingest.py – BIS SP-21 PDF Ingestion & Chunking Pipeline
-
-Parses the BIS SP 21 PDF (Summaries of Indian Standards for Building Materials),
-chunks the content intelligently, and builds a searchable index.
-
-Usage:
-    python src/ingest.py --pdf data/BIS_SP21.pdf --output data/chunks.json
-
-Dependencies:
-    pip install pdfplumber
-"""
-
 import argparse
 import json
 import re
@@ -31,7 +17,6 @@ SECTION_HEADERS = ["scope", "material", "physical requirements", "chemical requi
 
 
 def _extract_text_pdfplumber(pdf_path: str) -> List[Dict]:
-    """Extract text page by page using pdfplumber."""
     try:
         import pdfplumber
     except ImportError:
@@ -47,10 +32,7 @@ def _extract_text_pdfplumber(pdf_path: str) -> List[Dict]:
 
 
 def _chunk_by_standard(pages: List[Dict]) -> List[Dict]:
-    """
-    Chunk text so that each chunk corresponds to one BIS standard summary.
-    Strategy: split on IS XXXX header occurrences.
-    """
+
     full_text = "\n".join(p["text"] for p in pages)
     # Split on IS standard numbers
     parts = IS_HEADER_RE.split(full_text)
@@ -74,9 +56,7 @@ def _chunk_by_standard(pages: List[Dict]) -> List[Dict]:
 
 
 def _sliding_window_chunks(pages: List[Dict], window: int = 512, overlap: int = 64) -> List[Dict]:
-    """
-    Fallback: sliding window chunking over full page text.
-    """
+
     chunks = []
     for page in pages:
         text = page["text"]
