@@ -69,6 +69,7 @@ User enters a query (e.g., cement)
 Step 2: Retrieval
 TF-IDF algorithm finds matching standards
 Keyword boost improves accuracy
+
 Step 3: Ranking
 Top 3–5 relevant standards are selected.
 
