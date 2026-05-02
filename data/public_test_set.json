@@ -1,0 +1,42 @@
+[
+  {
+    "id": "q01",
+    "query": "Ordinary Portland Cement 43 grade for general construction and masonry"
+  },
+  {
+    "id": "q02",
+    "query": "High strength deformed TMT steel bars Fe500D for reinforced concrete columns in earthquake zone"
+  },
+  {
+    "id": "q03",
+    "query": "Coarse aggregates 20mm crushed stone gravel for concrete mix design M25"
+  },
+  {
+    "id": "q04",
+    "query": "Portland Pozzolana Cement fly ash based for mass concrete and hydraulic structures"
+  },
+  {
+    "id": "q05",
+    "query": "Hollow concrete masonry blocks 200mm for non-load bearing partition walls"
+  },
+  {
+    "id": "q06",
+    "query": "Chemical admixture superplasticiser water reducing agent for high performance concrete"
+  },
+  {
+    "id": "q07",
+    "query": "Burnt clay building bricks for load bearing masonry wall construction"
+  },
+  {
+    "id": "q08",
+    "query": "Mild steel structural steel plates and sections for industrial building fabrication"
+  },
+  {
+    "id": "q09",
+    "query": "Autoclaved aerated concrete AAC lightweight blocks for thermal insulation partition"
+  },
+  {
+    "id": "q10",
+    "query": "Fine aggregate manufactured sand M-sand for concrete and plastering mortar"
+  }
+]
