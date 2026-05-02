@@ -70,6 +70,7 @@ Step 2: Retrieval
 TF-IDF algorithm finds matching standards
 Keyword boost improves accuracy
 Step 3: Ranking
-Top 3–5 relevant standards are selected
+Top 3–5 relevant standards are selected.
+
 Step 4: Explanation
 AI or rule-based logic explains why each standard applies.
