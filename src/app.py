@@ -1,15 +1,10 @@
-
-
 import sys
 import json
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
-
 from flask import Flask, request, jsonify, render_template_string
 from src.rag_pipeline import recommend, reload_knowledge_base, DATA_SOURCE
-
 app = Flask(__name__)
-
 HTML = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
