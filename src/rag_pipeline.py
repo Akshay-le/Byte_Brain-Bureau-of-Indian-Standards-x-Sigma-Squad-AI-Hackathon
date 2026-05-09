@@ -1,11 +1,3 @@
-"""
-BIS Standards RAG Pipeline
-Retriever → LLM → Output
-
-Data source priority:
-  1. data/chunks.json  – produced by `python src/ingest.py --pdf data/BIS_SP21.pdf`
-  2. Hardcoded fallback KB (35 standards) – works out of the box without the PDF
-"""
 
 import os
 import json
@@ -19,13 +11,9 @@ from collections import Counter
 
 logger = logging.getLogger(__name__)
 
-# ── Paths ────────────────────────────────────────────────────────────────────
 _ROOT = Path(__file__).parent.parent
 _CHUNKS_PATH = _ROOT / "data" / "chunks.json"
 
-# ---------------------------------------------------------------------------
-# Hardcoded fallback KB  (used only if data/chunks.json is absent)
-# ---------------------------------------------------------------------------
 _FALLBACK_DB = [
     # ── CEMENT ──────────────────────────────────────────────────────────────
     {"id":"IS_269","standard":"IS 269","title":"Ordinary Portland Cement – Specification","category":"Cement","keywords":["cement","ordinary portland cement","opc","binding","concrete","mortar","construction"],"summary":"Specifies OPC used in general civil construction. Covers chemical composition, physical requirements, strength grades 33/43/53, and test methods.","year":"2015"},
@@ -76,9 +64,6 @@ _FALLBACK_DB = [
 ]
 
 
-# ---------------------------------------------------------------------------
-# Chunk loader – reads ingested PDF chunks produced by src/ingest.py
-# ---------------------------------------------------------------------------
 
 def _load_chunks_from_pdf(path: Path) -> Optional[List[Dict]]:
     """
@@ -122,10 +107,7 @@ def _guess_year(text: str) -> str:
 
 
 def _chunks_to_docs(chunks: List[Dict]) -> List[Dict]:
-    """
-    Convert raw PDF chunks into the standard doc schema so the
-    same TF-IDF retriever works for both PDF chunks and fallback KB.
-    """
+
     docs = []
     for c in chunks:
         text = c.get("text", "")
@@ -151,9 +133,6 @@ def _chunks_to_docs(chunks: List[Dict]) -> List[Dict]:
     return docs
 
 
-# ---------------------------------------------------------------------------
-# TF-IDF retriever
-# ---------------------------------------------------------------------------
 
 def _tokenize(text: str) -> List[str]:
     text = text.lower()
@@ -196,15 +175,10 @@ def _cosine(a: Dict, b: Dict) -> float:
     return dot / (na * nb + 1e-9)
 
 
-# ---------------------------------------------------------------------------
-# Runtime: choose data source and build index
-# ---------------------------------------------------------------------------
+
 
 def _init_knowledge_base():
-    """
-    Returns (docs, index, source_label).
-    Prefers PDF-ingested chunks; falls back to hardcoded KB.
-    """
+    
     raw_chunks = _load_chunks_from_pdf(_CHUNKS_PATH)
     if raw_chunks:
         docs = _chunks_to_docs(raw_chunks)
@@ -228,9 +202,6 @@ def reload_knowledge_base():
     return DATA_SOURCE
 
 
-# ---------------------------------------------------------------------------
-# Retriever
-# ---------------------------------------------------------------------------
 
 def retrieve(query: str, top_k: int = 5) -> List[Dict]:
     q_tokens = _tokenize(query)
@@ -254,9 +225,7 @@ def retrieve(query: str, top_k: int = 5) -> List[Dict]:
     return results
 
 
-# ---------------------------------------------------------------------------
-# LLM rationale via Anthropic API
-# ---------------------------------------------------------------------------
+
 
 def _call_anthropic(product_desc: str, standards: List[Dict]) -> Optional[Dict[str, str]]:
     try:
@@ -302,15 +271,10 @@ def _fallback_rationale(product_desc: str, standard: Dict) -> str:
     )
 
 
-# ---------------------------------------------------------------------------
-# Public API
-# ---------------------------------------------------------------------------
+
 
 def recommend(product_description: str, top_k: int = 5) -> Dict[str, Any]:
-    """
-    Full RAG pipeline: Retriever → LLM → Output.
-    Returns dict with query, retrieved_standards, latency_seconds, data_source.
-    """
+
     t0 = time.time()
     candidates = retrieve(product_description, top_k=max(top_k, 7))[:top_k]
     api_rationales = _call_anthropic(product_description, candidates)
