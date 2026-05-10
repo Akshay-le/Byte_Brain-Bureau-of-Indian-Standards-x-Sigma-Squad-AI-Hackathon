@@ -209,8 +209,8 @@ HTML = r"""<!DOCTYPE html>
 </div>
 
 <div class="hero">
-  <div class="hero-eyebrow">Powered by Retrieval-Augmented Generation</div>
-  <h1>Find the right <span>BIS Standard</span> in seconds</h1>
+  
+  <h1>Find the right <span>BIS Standard</span> </h1>
   <p class="hero-sub">Describe your product and instantly get the top applicable BIS standards with clear rationale. Designed for Indian MSEs.</p>
   <div class="search-wrap">
     <textarea id="queryInput" class="search-box" rows="2"
